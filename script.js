@@ -1,103 +1,103 @@
 window.onload = function() {
+    const startScreen = document.getElementById('start-screen');
+    const gameArea = document.getElementById('game-area');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const finalScoreDisplay = document.getElementById('final-score');
+    const restartButton = document.getElementById('restart-button');
     const music = document.getElementById('backgroundMusic');
-    const images = [
-        'assets/images/image1.jpg',
-        'assets/images/image2.jpg',
-        'assets/images/image3.jpg',
-        'assets/images/image4.jpg',
-        'assets/images/image5.jpg',
-        'assets/images/image6.jpg'
+    const scoreDisplay = document.getElementById('score');
+    const fragments = [
+        'assets/images/fragment1.png',
+        'assets/images/fragment2.png',
+        'assets/images/fragment3.png',
+        'assets/images/fragment4.png',
+        'assets/images/fragment5.png',
+        'assets/images/fragment6.png'
     ];
-    const musicTracks = [
-        'assets/music/Frozen Echoes.mp3',
-        'assets/music/Bubbly Dream.mp3'
-    ];
-    let currentImageIndex = 0;
-    let currentMusicIndex = 0;
     let score = 0;
 
     // Initial settings
-    let createCrystalInterval = 3000; // Interval to create crystals
-    let crystalLifetime = 5000; // Time crystals remain on screen
+    let createFragmentInterval = 3000; // Interval to create fragments
+    let fragmentLifetime = 5000; // Time fragments remain on screen
+    let fragmentIntervalId;
 
-    // Function to change background image
-    function changeBackgroundImage() {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
-    }
+    // Set initial background image for start screen
+    document.body.style.backgroundImage = `url('assets/images/start.jpg')`;
 
-    // Function to change music track
-    function changeMusicTrack() {
-        currentMusicIndex = (currentMusicIndex + 1) % musicTracks.length;
-        music.src = musicTracks[currentMusicIndex];
-        music.play().catch(error => {
-            console.error('Failed to play new music:', error);
-        });
-    }
+    function createFragment() {
+        const fragment = document.createElement('div');
+        fragment.classList.add('fragment');
+        const randomFragment = fragments[Math.floor(Math.random() * fragments.length)];
+        fragment.style.backgroundImage = `url('${randomFragment}')`;
+        fragment.style.top = `${Math.random() * (gameArea.clientHeight - 30)}px`;
+        fragment.style.left = `${Math.random() * (gameArea.clientWidth - 30)}px`;
 
-    // Set initial background image
-    document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+        console.log('Fragment created at:', fragment.style.top, fragment.style.left);
 
-    // Ensure the music plays when the page loads
-    music.volume = 0.2;
-    music.play().catch(error => {
-        console.error('Failed to play music automatically:', error);
-        // Handle autoplay policy restriction by user interaction
-        document.body.addEventListener('click', () => {
-            music.play();
-        }, { once: true });
-    });
-
-    // Game logic
-    const gameArea = document.getElementById('game-area');
-    const scoreDisplay = document.getElementById('score');
-
-    function createCrystal() {
-        const crystal = document.createElement('div');
-        crystal.classList.add('crystal');
-        crystal.style.top = `${Math.random() * (gameArea.clientHeight - 30)}px`;
-        crystal.style.left = `${Math.random() * (gameArea.clientWidth - 30)}px`;
-
-        console.log('Crystal created at:', crystal.style.top, crystal.style.left);
-
-        crystal.addEventListener('click', () => {
+        fragment.addEventListener('click', () => {
             score++;
             scoreDisplay.innerText = `Score: ${score}`;
-            gameArea.removeChild(crystal);
+            gameArea.removeChild(fragment);
 
-            // Change background image every 5 crystals
-            if (score % 5 === 0) {
-                changeBackgroundImage();
+            // Increase difficulty: make fragments appear and disappear faster
+            if (createFragmentInterval > 1000) {
+                createFragmentInterval -= 100;
             }
-
-            // Change music every 15 crystals
-            if (score % 15 === 0) {
-                changeMusicTrack();
-            }
-
-            // Increase difficulty: make crystals appear and disappear faster
-            if (createCrystalInterval > 1000) {
-                createCrystalInterval -= 100;
-            }
-            if (crystalLifetime > 2000) {
-                crystalLifetime -= 100;
+            if (fragmentLifetime > 2000) {
+                fragmentLifetime -= 100;
             }
 
             // Clear existing interval and set a new one with updated speed
-            clearInterval(crystalIntervalId);
-            crystalIntervalId = setInterval(createCrystal, createCrystalInterval);
+            clearInterval(fragmentIntervalId);
+            fragmentIntervalId = setInterval(createFragment, createFragmentInterval);
         });
 
-        gameArea.appendChild(crystal);
+        gameArea.appendChild(fragment);
 
-        // Remove crystal after its lifetime
+        // Remove fragment after its lifetime
         setTimeout(() => {
-            if (gameArea.contains(crystal)) {
-                gameArea.removeChild(crystal);
+            if (gameArea.contains(fragment)) {
+                gameArea.removeChild(fragment);
+                // Game over if a fragment is missed
+                endGame();
             }
-        }, crystalLifetime);
+        }, fragmentLifetime);
     }
 
-    // Initial interval to create crystals
-    let crystalIntervalId = setInterval(createCrystal, createCrystalInterval);
+    function startGame() {
+        score = 0;
+        scoreDisplay.innerText = `Score: ${score}`;
+        createFragmentInterval = 3000;
+        fragmentLifetime = 5000;
+
+        startScreen.classList.add('hidden');
+        gameOverScreen.classList.add('hidden');
+        gameArea.classList.remove('hidden');
+
+        document.body.style.backgroundImage = `url('assets/images/background.jpg')`;
+
+        music.currentTime = 0;
+        music.play().catch(error => {
+            console.error('Failed to play music automatically:', error);
+        });
+
+        fragmentIntervalId = setInterval(createFragment, createFragmentInterval);
+    }
+
+    function endGame() {
+        clearInterval(fragmentIntervalId);
+        gameArea.classList.add('hidden');
+        gameOverScreen.classList.remove('hidden');
+        finalScoreDisplay.innerText = score;
+
+        document.body.style.backgroundImage = `url('assets/images/start.jpg')`;
+    }
+
+    document.body.addEventListener('click', (event) => {
+        if (startScreen.contains(event.target)) {
+            startGame();
+        }
+    });
+
+    restartButton.addEventListener('click', startGame);
 }
