@@ -15,36 +15,41 @@ window.onload = function() {
         'assets/images/fragment6.png'
     ];
     let score = 0;
+    let currentFragmentIndex = 0;
 
     // Initial settings
-    let createFragmentInterval = 3000; // Interval to create fragments
-    let fragmentLifetime = 5000; // Time fragments remain on screen
+    let createFragmentInterval = 5000; // Slower interval to create fragments
+    let fragmentLifetime = 7000; // Time fragments remain on screen
     let fragmentIntervalId;
 
     // Set initial background image for start screen
     document.body.style.backgroundImage = `url('assets/images/start.jpg')`;
 
     function createFragment() {
+        if (currentFragmentIndex >= fragments.length) {
+            currentFragmentIndex = 0; // Reset index to loop fragments
+        }
+
         const fragment = document.createElement('div');
         fragment.classList.add('fragment');
-        const randomFragment = fragments[Math.floor(Math.random() * fragments.length)];
-        fragment.style.backgroundImage = `url('${randomFragment}')`;
-        fragment.style.top = `${Math.random() * (gameArea.clientHeight - 30)}px`;
-        fragment.style.left = `${Math.random() * (gameArea.clientWidth - 30)}px`;
-
-        console.log('Fragment created at:', fragment.style.top, fragment.style.left);
+        const currentFragment = fragments[currentFragmentIndex];
+        fragment.style.backgroundImage = `url('${currentFragment}')`;
+        fragment.style.top = `${Math.random() * (gameArea.clientHeight - 50)}px`; // Adjusted for larger size
+        fragment.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`; // Adjusted for larger size
 
         fragment.addEventListener('click', () => {
             score++;
             scoreDisplay.innerText = `Score: ${score}`;
             gameArea.removeChild(fragment);
 
+            currentFragmentIndex++;
+
             // Increase difficulty: make fragments appear and disappear faster
-            if (createFragmentInterval > 1000) {
-                createFragmentInterval -= 100;
+            if (createFragmentInterval > 2000) {
+                createFragmentInterval -= 500;
             }
-            if (fragmentLifetime > 2000) {
-                fragmentLifetime -= 100;
+            if (fragmentLifetime > 3000) {
+                fragmentLifetime -= 500;
             }
 
             // Clear existing interval and set a new one with updated speed
@@ -67,8 +72,9 @@ window.onload = function() {
     function startGame() {
         score = 0;
         scoreDisplay.innerText = `Score: ${score}`;
-        createFragmentInterval = 3000;
-        fragmentLifetime = 5000;
+        createFragmentInterval = 5000;
+        fragmentLifetime = 7000;
+        currentFragmentIndex = 0;
 
         startScreen.classList.add('hidden');
         gameOverScreen.classList.add('hidden');
