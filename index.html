@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Start</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Six Broken Fragments</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-area">
-        <!-- Fragment container and other game elements -->
-        <div id="fragment-container"></div>
-        <div id="game-text">Fūneris heu tibi causa fuī?</div>
-    </div>
-    <div id="start-screen">
-        <div id="start-text">
-            <div class="start-instructions">
-                <p>Find the fragments...</p>
-                <p>Click them in order...</p>
-                <p>Complete the puzzle...</p>
-                <p>Enter the depths...</p>
-                <p>Discover the truth...</p>
-                <p>But beware...</p>
-                <p>The shadows watch...</p>
-                <button id="start-button">Begin</button>
+    <div id="app">
+        <div id="start-screen" class="screen">
+            <button id="start-button">Start</button>
+        </div>
+        <div id="game-screen" class="screen hidden">
+            <div id="game-container">
+                <img src="" alt="Fragment" id="fragment">
+                <div id="center-text"></div>
             </div>
         </div>
+        <div id="end-screen" class="screen hidden">
+            <p>Alas, was I the cause of your dying?</p>
+        </div>
     </div>
-    <audio id="bg-music" src="assets/music/Northern Odyssey.mp3" loop></audio>
+    <audio id="game-music" src="assets/music/Northern Odyssey.mp3" loop></audio>
+    <script src="script.js"></script>
 </body>
 </html>

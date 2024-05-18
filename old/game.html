@@ -1,0 +1,84 @@
+<!-- game.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Six Broken Fragments - Game</title>
+    <style>
+        body {
+            background-image: url('assets/images/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #fragment {
+            position: absolute;
+            transition: transform 2s linear;
+            cursor: pointer;
+        }
+        .text-box {
+            position: absolute;
+            background-color: #150607;
+            color: #a67273;
+            border: 2px solid #06d391;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 24px;
+            width: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="fragment" onclick="nextFragment()">
+        <!-- Initial fragment will be inserted here dynamically -->
+    </div>
+    <div id="text" class="text-box"></div>
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="assets/music/Northern Odyssey.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <script>
+        // JavaScript logic for the game
+        let fragmentIndex = 1;
+
+        const fragments = [
+            { name: "Courage", text: "Courage" },
+            { name: "Temperance", text: "Temperance" },
+            { name: "Prudence", text: "Prudence" },
+            { name: "Faith", text: "Faith" },
+            { name: "Justice", text: "Justice" },
+            { name: "Frailty", text: "Frailty" }
+        ];
+
+        function nextFragment() {
+            if (fragmentIndex <= fragments.length) {
+                document.getElementById("text").textContent = fragments[fragmentIndex - 1].text;
+                document.getElementById("fragment").style.backgroundImage = `url('assets/images/fragment${fragmentIndex}.png')`;
+                animateFragment(); // Implement animation function
+                fragmentIndex++;
+            } else {
+                // All fragments collected
+                document.getElementById("fragment").style.display = "none";
+                document.getElementById("text").textContent = "Alas, was I the cause of your dying?";
+            }
+        }
+
+        function animateFragment() {
+            // Implement animation here (curved movements, spirals)
+            // Example: Use CSS animations or JavaScript for curved movements
+            document.getElementById("fragment").style.transform = "translate(0, 0)"; // Example translation
+        }
+    </script>
+</body>
+</html>
