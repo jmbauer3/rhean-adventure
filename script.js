@@ -1,109 +1,160 @@
-window.onload = function() {
-    const startScreen = document.getElementById('start-screen');
-    const gameArea = document.getElementById('game-area');
-    const gameOverScreen = document.getElementById('game-over-screen');
-    const finalScoreDisplay = document.getElementById('final-score');
-    const restartButton = document.getElementById('restart-button');
-    const music = document.getElementById('backgroundMusic');
-    const scoreDisplay = document.getElementById('score');
-    const fragments = [
-        'assets/images/fragment1.png',
-        'assets/images/fragment2.png',
-        'assets/images/fragment3.png',
-        'assets/images/fragment4.png',
-        'assets/images/fragment5.png',
-        'assets/images/fragment6.png'
-    ];
-    let score = 0;
-    let currentFragmentIndex = 0;
+// Game initialization variables
+const fragmentImages = [
+    "assets/images/fragment1.png",
+    "assets/images/fragment2.png",
+    "assets/images/fragment3.png",
+    "assets/images/fragment4.png",
+    "assets/images/fragment5.png",
+    "assets/images/fragment6.png"
+];
+const fragmentSpeed = 1; // Speed of fragment movement (pixels per frame)
+const fragmentSize = 60; // Size of fragments (width and height)
+const fragmentRadius = 150; // Radius of circular movement
+const fragmentAngleSpeed = 0.01; // Speed of angle change (radians per frame)
+let currentFragmentIndex = 0;
+let currentFragment;
 
-    // Initial settings
-    let createFragmentInterval = 5000; // Slower interval to create fragments
-    let fragmentLifetime = 7000; // Time fragments remain on screen
-    let fragmentIntervalId;
+// DOM elements
+const gameArea = document.getElementById('game-area');
+const fragmentContainer = document.getElementById('fragment-container');
+const startScreen = document.getElementById('start-screen');
+const startText = document.getElementById('start-text');
+const gameText = document.getElementById('game-text');
+const bgMusic = document.getElementById('bg-music');
 
-    // Set initial background image for start screen
-    document.body.style.backgroundImage = `url('assets/images/start.jpg')`;
+// Start screen click event
+startScreen.addEventListener('click', () => {
+    startGame();
+});
 
-    function createFragment() {
-        if (currentFragmentIndex >= fragments.length) {
-            currentFragmentIndex = 0; // Reset index to loop fragments
+// Function to start the game
+function startGame() {
+    // Hide start screen
+    startScreen.style.display = 'none';
+    
+    // Display game area and game text
+    gameArea.style.display = 'block';
+    gameText.style.display = 'block';
+
+    // Play background music
+    bgMusic.play();
+
+    // Create initial fragment
+    createFragment();
+}
+
+// Function to create a fragment
+function createFragment() {
+    currentFragment = new Image();
+    currentFragment.src = fragmentImages[currentFragmentIndex];
+    currentFragment.classList.add('game-fragment');
+    currentFragment.dataset.fragment = currentFragmentIndex + 1; // Store fragment index
+    currentFragment.style.width = `${fragmentSize}px`; // Set fragment size
+    currentFragment.style.height = `${fragmentSize}px`; // Set fragment size
+    fragmentContainer.appendChild(currentFragment);
+
+    // Set initial position
+    currentFragment.style.left = `${Math.random() * (window.innerWidth - fragmentSize)}px`;
+    currentFragment.style.top = `${Math.random() * (window.innerHeight - fragmentSize)}px`;
+
+    // Start movement
+    moveFragment(currentFragment);
+}
+
+// Function to move the fragment in curved paths
+function moveFragment(fragment) {
+    let centerX = parseFloat(fragment.style.left) + fragmentSize / 2;
+    let centerY = parseFloat(fragment.style.top) + fragmentSize / 2;
+    let angle = Math.random() * Math.PI * 2; // Initial random angle
+    let radius = fragmentRadius + Math.random() * 50; // Random radius variation
+    let direction = Math.random() < 0.5 ? -1 : 1; // Randomize movement direction
+
+    const move = () => {
+        angle += fragmentAngleSpeed * direction;
+
+        let newX = centerX + radius * Math.cos(angle);
+        let newY = centerY + radius * Math.sin(angle);
+
+        fragment.style.left = `${newX - fragmentSize / 2}px`;
+        fragment.style.top = `${newY - fragmentSize / 2}px`;
+
+        requestAnimationFrame(move);
+    };
+
+    move();
+
+    // Click event handler
+    fragment.addEventListener('click', () => {
+        fragment.remove();
+        currentFragmentIndex++;
+        if (currentFragmentIndex < fragmentImages.length) {
+            // Create the next fragment
+            createFragment();
+        } else {
+            // All fragments collected, game won
+            gameWon();
         }
 
-        const fragment = document.createElement('div');
-        fragment.classList.add('fragment');
-        const currentFragment = fragments[currentFragmentIndex];
-        fragment.style.backgroundImage = `url('${currentFragment}')`;
-        fragment.style.top = `${Math.random() * (gameArea.clientHeight - 50)}px`; // Adjusted for larger size
-        fragment.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`; // Adjusted for larger size
+        // Change game text based on fragment clicked
+        handleFragmentClick(currentFragmentIndex);
+    });
+}
 
-        fragment.addEventListener('click', () => {
-            score++;
-            scoreDisplay.innerText = `Score: ${score}`;
-            gameArea.removeChild(fragment);
+// Function to handle game won scenario
+function gameWon() {
+    // Change game text
+    gameText.innerText = "Alas, was I the cause of your dying?";
 
-            currentFragmentIndex++;
+    // Redirect to the specified link after a delay
+    setTimeout(() => {
+        window.location.href = 'https://jmbauer3.github.io/Rhean/';
+    }, 3000); // Redirect after 3 seconds
+}
 
-            // Increase difficulty: make fragments appear and disappear faster
-            if (createFragmentInterval > 2000) {
-                createFragmentInterval -= 500;
-            }
-            if (fragmentLifetime > 3000) {
-                fragmentLifetime -= 500;
-            }
-
-            // Clear existing interval and set a new one with updated speed
-            clearInterval(fragmentIntervalId);
-            fragmentIntervalId = setInterval(createFragment, createFragmentInterval);
-        });
-
-        gameArea.appendChild(fragment);
-
-        // Remove fragment after its lifetime
-        setTimeout(() => {
-            if (gameArea.contains(fragment)) {
-                gameArea.removeChild(fragment);
-                // Game over if a fragment is missed
-                endGame();
-            }
-        }, fragmentLifetime);
+// Function to handle fragment clicks
+function handleFragmentClick(fragmentNumber) {
+    // Change game text based on fragment clicked
+    let text = "";
+    switch (fragmentNumber) {
+        case 1:
+            text = "Courage";
+            break;
+        case 2:
+            text = "Temperance";
+            break;
+        case 3:
+            text = "Prudence";
+            break;
+        case 4:
+            text = "Faith";
+            break;
+        case 5:
+            text = "Justice";
+            break;
+        case 6:
+            text = "Frailty";
+            break;
+        default:
+            text = "Fūneris heu tibi causa fuī?";
+            break;
     }
+    gameText.innerText = text;
+}
 
-    function startGame() {
-        score = 0;
-        scoreDisplay.innerText = `Score: ${score}`;
-        createFragmentInterval = 5000;
-        fragmentLifetime = 7000;
-        currentFragmentIndex = 0;
-
-        startScreen.classList.add('hidden');
-        gameOverScreen.classList.add('hidden');
-        gameArea.classList.remove('hidden');
-
-        document.body.style.backgroundImage = `url('assets/images/background.jpg')`;
-
-        music.currentTime = 0;
-        music.play().catch(error => {
-            console.error('Failed to play music automatically:', error);
-        });
-
-        fragmentIntervalId = setInterval(createFragment, createFragmentInterval);
-    }
-
-    function endGame() {
-        clearInterval(fragmentIntervalId);
-        gameArea.classList.add('hidden');
-        gameOverScreen.classList.remove('hidden');
-        finalScoreDisplay.innerText = score;
-
-        document.body.style.backgroundImage = `url('assets/images/start.jpg')`;
-    }
-
-    document.body.addEventListener('click', (event) => {
-        if (startScreen.contains(event.target)) {
-            startGame();
-        }
+// Initialize the game when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Click event listener for start button
+    document.getElementById('start-button').addEventListener('click', function() {
+        // Show game area and hide start screen
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('game-area').style.display = 'block';
     });
 
-    restartButton.addEventListener('click', startGame);
-}
+    // Click event listener for fragments (simulated clicks for demonstration)
+    document.getElementById('fragment-container').addEventListener('click', function(event) {
+        if (event.target.classList.contains('game-fragment')) {
+            let fragmentNumber = parseInt(event.target.dataset.fragment);
+            handleFragmentClick(fragmentNumber);
+        }
+    });
+});

@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rhean Adventure</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Game Start</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="game-area">
+        <!-- Fragment container and other game elements -->
+        <div id="fragment-container"></div>
+        <div id="game-text">Fūneris heu tibi causa fuī?</div>
+    </div>
     <div id="start-screen">
-        <h1>Rhean Adventure</h1>
-        <p>Click to start your journey through the icy expanse.</p>
+        <div id="start-text">
+            <div class="start-instructions">
+                <p>Find the fragments...</p>
+                <p>Click them in order...</p>
+                <p>Complete the puzzle...</p>
+                <p>Enter the depths...</p>
+                <p>Discover the truth...</p>
+                <p>But beware...</p>
+                <p>The shadows watch...</p>
+                <button id="start-button">Begin</button>
+            </div>
+        </div>
     </div>
-    <div id="game-area" class="hidden">
-        <h1>Rhean Adventure</h1>
-        <p>Alas, was I the cause of your dying?</p>
-        <div id="score">Score: 0</div>
-    </div>
-    <div id="game-over-screen" class="hidden">
-        <h1>Game Over</h1>
-        <p>Your final score: <span id="final-score">0</span></p>
-        <p>And in the end, the questions of good and evil mean nothing to the time she spends with fallen comrades.</p>
-        <button id="restart-button">Restart</button>
-    </div>
-    
-    <audio id="backgroundMusic" loop>
-        <source src="assets/music/Northern Odyssey.mp3" type="audio/mpeg">
-    </audio>
-
-    <script src="script.js"></script>
+    <audio id="bg-music" src="assets/music/Northern Odyssey.mp3" loop></audio>
 </body>
 </html>

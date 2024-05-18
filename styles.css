@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #150607; /* Dark background color */
+    background-image: url("assets/images/background.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+#game-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Ensure game area doesn't overflow */
+}
+
+#game-text {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+#fragment-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Ensure fragment container doesn't overflow */
+}
+
+#start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-image: url("assets/images/start.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#start-text {
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border: 3px solid #a67273; /* Border color from palette */
+    background-color: rgba(21, 6, 7, 0.7); /* Background color from palette */
+}
+
+.start-instructions {
+    margin-bottom: 20px;
+}
+
+.start-instructions p {
+    margin: 10px 0;
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+.start-instructions button {
+    padding: 10px 20px;
+    background-color: #cf4a30; /* Reddish button color */
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    border: none;
+    border-radius: 20px; /* Rounded button */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-instructions button:hover {
+    background-color: #ff6655; /* Reddish glow on hover */
+}
