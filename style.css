@@ -28,7 +28,7 @@ body, html {
 }
 
 #start-screen {
-    background: url('assets/images/start.jpg') no-repeat center center/cover;
+    background: url('assets/images/start.jpg') no-repeat center center;
     cursor: pointer;
 }
 
