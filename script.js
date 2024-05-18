@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const startButton = document.getElementById('start-button');
     const startScreen = document.getElementById('start-screen');
     const gameScreen = document.getElementById('game-screen');
     const endScreen = document.getElementById('end-screen');
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentFragmentIndex = 0;
 
-    startButton.addEventListener('click', () => {
+    startScreen.addEventListener('click', () => {
         startScreen.classList.add('hidden');
         setTimeout(() => {
             startScreen.style.display = 'none';
@@ -45,6 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
         fragment.style.left = `${Math.random() * (gameScreen.clientWidth - fragment.width)}px`;
         fragment.style.top = `${Math.random() * (gameScreen.clientHeight - fragment.height)}px`;
         fragment.classList.remove('hidden');
+        animateFragment();
+    }
+
+    function animateFragment() {
+        fragment.style.animation = '';
+        setTimeout(() => {
+            fragment.style.animation = 'moveFragment 5s infinite';
+        }, 10); // Restart animation to apply new position
     }
 
     function endGame() {
