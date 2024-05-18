@@ -7,10 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-area">
+    <div id="start-screen">
+        <h1>Frozen Dreams</h1>
+        <p>Click to start your journey through the icy expanse.</p>
+    </div>
+    <div id="game-area" class="hidden">
         <h1>Frozen Dreams</h1>
         <p>A tranquil journey through the icy expanse.</p>
         <div id="score">Score: 0</div>
+    </div>
+    <div id="game-over-screen" class="hidden">
+        <h1>Game Over</h1>
+        <p>Your final score: <span id="final-score">0</span></p>
+        <button id="restart-button">Restart</button>
     </div>
     
     <audio id="backgroundMusic" loop>
