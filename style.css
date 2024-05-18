@@ -50,17 +50,13 @@ body, html {
     animation: moveFragment 5s infinite;
 }
 
-#center-text, #end-screen p {
-    background: rgba(24, 24, 24, 0.8);
+#center-text {
+    background: white; /* Changed background to white */
     padding: 20px;
     border-radius: 10px;
-    border: 2px solid #652827;
-    color: #06d391;
+    color: black;
     text-align: center;
     max-width: 300px;
-}
-
-#center-text {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -69,14 +65,16 @@ body, html {
 }
 
 #end-screen {
-    background-color: #390e0d;
-    color: #a67273;
+    background: url('assets/images/shadows.png') repeat-x center center space; /* Fill the whole screen with shadows.png */
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-style: italic;
     font-size: 24px;
     padding: 20px;
-    border: 2px solid #652827;
-    border-radius: 10px;
     text-align: center;
-    box-shadow: 0 0 10px 2px #ff0000;
+    max-width: 80%;
+    box-shadow: none;
 }
 
 @keyframes moveFragment {
